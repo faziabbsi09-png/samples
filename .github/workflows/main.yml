@@ -16,14 +16,16 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable' # Yeh khud sabse naya version uthayega
+          channel: 'stable'
 
       - name: Get dependencies
-        run: flutter pub get
+        run: |
+          flutter clean
+          flutter pub get
         working-directory: material_3_demo
 
       - name: Build APK
-        run: flutter build apk --release --no-sound-null-safety
+        run: flutter build apk --release
         working-directory: material_3_demo
 
       - name: Upload APK
