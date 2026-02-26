@@ -6,20 +6,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-      - uses: subosito/flutter-action@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          
-      - name: Get dependencies
-        run: flutter pub get
+
+      - name: Fix Permissions & Dependencies
+        run: |
+          chmod +x android/gradlew || true
+          flutter clean
+          flutter pub upgrade --major-versions
         working-directory: material_3_demo
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --release --verbose
         working-directory: material_3_demo
 
       - name: Upload APK
