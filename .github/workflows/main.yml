@@ -16,7 +16,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0' # Yeh version purane Gradle scripts ko block nahi karta
+          flutter-version: '3.41.2' # Bilkul wahi version jo error maang raha hai
           channel: 'stable'
 
       - name: Get dependencies
@@ -26,7 +26,9 @@ jobs:
         working-directory: material_3_demo
 
       - name: Build APK
-        run: flutter build apk --release --no-tree-shake-icons
+        run: |
+          # Naye Flutter version mein Gradle ka purana method bypass karne ke liye
+          flutter build apk --release
         working-directory: material_3_demo
 
       - name: Upload APK
