@@ -1,4 +1,3 @@
-
 name: Flutter Build APK
 on: [push]
 
@@ -17,7 +16,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41.2' # Bilkul wahi version jo error ne maanga hai
+          flutter-version: '3.22.0' # Sabse stable version jo naye errors nahi deta
           channel: 'stable'
 
       - name: Get dependencies
@@ -25,7 +24,7 @@ jobs:
         working-directory: material_3_demo
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --release --no-pub --no-tree-shake-icons
         working-directory: material_3_demo
 
       - name: Upload APK
@@ -33,4 +32,3 @@ jobs:
         with:
           name: star-chat-apk
           path: material_3_demo/build/app/outputs/flutter-apk/app-release.apk
-          
