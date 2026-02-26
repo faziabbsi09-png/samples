@@ -11,7 +11,8 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '17'
+          java-version: '17' # Naye Flutter ke liye Java 17 zaroori hai
+          cache: 'gradle'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -24,8 +25,10 @@ jobs:
           flutter pub get
         working-directory: material_3_demo
 
-      - name: Build APK
-        run: flutter build apk --release
+      - name: Build APK (Force Gradle)
+        run: |
+          # Agar purana Gradle issue ho to ye fix karega
+          flutter build apk --release --target-platform android-arm64
         working-directory: material_3_demo
 
       - name: Upload APK
@@ -33,4 +36,3 @@ jobs:
         with:
           name: star-chat-apk
           path: material_3_demo/build/app/outputs/flutter-apk/app-release.apk
-          
