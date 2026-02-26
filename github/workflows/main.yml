@@ -1,0 +1,29 @@
+name: Flutter Build APK
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          
+      - name: Get dependencies
+        run: flutter pub get
+        working-directory: material_3_demo
+
+      - name: Build APK
+        run: flutter build apk --release
+        working-directory: material_3_demo
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: star-chat-apk
+          path: material_3_demo/build/app/outputs/flutter-apk/app-release.apk
