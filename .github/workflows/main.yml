@@ -1,38 +1,29 @@
-name: Main Branch CI
-
-# Declare default permissions as read only.
-permissions: read-all
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * *" # Every day at midnight
-
-defaults:
-  run:
-    shell: bash
+name: Flutter Build APK
+on: [push]
 
 jobs:
-  flutter-tests:
-    name: Test Flutter ${{ matrix.flutter_version }} on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    if: github.repository == 'flutter/samples'
-    strategy:
-      fail-fast: false
-      matrix:
-        flutter_version: [stable, beta]
-        os: [ubuntu-latest, macos-latest]
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-      - uses: subosito/flutter-action@e938fdf56512cc96ef2f93601a5a40bde3801046
+      - uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.flutter_version }}
-      - run: flutter pub get && dart tool/ci_script.dart
+          channel: 'stable'
+          
+      - name: Get dependencies
+        run: flutter pub get
+        working-directory: material_3_demo
+
+      - name: Build APK
+        run: flutter build apk --release
+        working-directory: material_3_demo
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: star-chat-apk
+          path: material_3_demo/build/app/outputs/flutter-apk/app-release.apk
