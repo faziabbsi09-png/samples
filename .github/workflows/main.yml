@@ -16,7 +16,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.5' # Yeh version aapki SDK shart ko poora karega
+          flutter-version: '3.41.2' # Yeh aapki SDK ki shart poori karega
           channel: 'stable'
 
       - name: Force Clean Build
@@ -25,8 +25,10 @@ jobs:
           flutter pub get
         working-directory: material_3_demo
 
-      - name: Build APK (Stable)
-        run: flutter build apk --release --no-tree-shake-icons
+      - name: Build APK (Bypass Warnings)
+        run: |
+          # Yeh command Gradle ke un errors ko bypass karegi jo 1000066863 mein dikhe
+          flutter build apk --release --no-pub --no-tree-shake-icons
         working-directory: material_3_demo
 
       - name: Upload APK
