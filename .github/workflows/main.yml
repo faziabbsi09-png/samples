@@ -16,23 +16,22 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41.2' # Bilkul wahi version jo error maang raha hai
           channel: 'stable'
 
-      - name: Get dependencies
+      - name: Fix Dependencies
         run: |
           flutter clean
-          flutter pub get
+          flutter pub upgrade
         working-directory: material_3_demo
 
-      - name: Build APK
+      - name: Build APK (Ignore Warnings)
         run: |
-          # Naye Flutter version mein Gradle ka purana method bypass karne ke liye
-          flutter build apk --release
+          # Yeh command Kotlin errors ko minimize karne ke liye hai
+          flutter build apk --release --no-pub --target-platform android-arm64
         working-directory: material_3_demo
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: star-chat-apk
+          name: star-chat-app
           path: material_3_demo/build/app/outputs/flutter-apk/app-release.apk
