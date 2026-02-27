@@ -1,24 +1,33 @@
-name: Final Build APK
+name: Success Build APK
 on: [push]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-      - uses: subosito/flutter-action@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41.2'
+          flutter-version: '3.41.2' # Aapka required version
           channel: 'stable'
-      - run: |
+
+      - name: Build Final APK
+        run: |
           flutter clean
           flutter pub get
           flutter build apk --release
         working-directory: material_3_demo
-      - uses: actions/upload-artifact@v4
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
-          name: success-apk
+          name: star-chat-apk
           path: material_3_demo/build/app/outputs/flutter-apk/app-release.apk
