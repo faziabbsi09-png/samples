@@ -15,7 +15,8 @@ jobs:
         with:
           flutter-version: '3.19.0'
           channel: 'stable'
-      - run: |
+      - name: Build APK
+        run: |
           flutter clean
           flutter pub get
           flutter build apk --release --no-tree-shake-icons
